@@ -19,6 +19,13 @@ Use before meaningful implementation in a new repository.
 - [ ] CODEOWNERS protects agent/safety/workflow files.
 - [ ] Safety workflow is green in CI.
 
+## Repository governance
+- [ ] Branch protection / ruleset blocks direct writes to `main` where GitHub plan/features allow it.
+- [ ] Pull request is required before merge.
+- [ ] Required status checks include `agent-safety` plus the project quality gate.
+- [ ] Force pushes and branch deletion are disabled on `main`.
+- [ ] Admin/bypass policy is deliberate and documented for recovery.
+
 ## Engineering
 - [ ] Stack is chosen for product needs, not agent preference.
 - [ ] Tests exist for critical invariants.
