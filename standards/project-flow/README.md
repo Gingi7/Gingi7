@@ -43,7 +43,7 @@ jobs:
       config_path: ops/project-flow.project.json
 ```
 
-The reusable workflow checks out the **same upstream commit that contains the workflow** using `github.workflow_sha`, then runs the engine against the caller repository.
+The reusable workflow checks out a **fixed engine commit** recorded inside the workflow, while consumer repositories pin the reusable workflow itself by immutable SHA. Updating the engine therefore requires an explicit upstream standard release rather than silently following `main`.
 
 ## Outcome Gate
 
