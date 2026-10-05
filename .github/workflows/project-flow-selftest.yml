@@ -1,0 +1,24 @@
+name: GINGI standard self-test
+
+on:
+  push:
+    paths:
+      - 'standards/project-flow/**'
+      - '.github/workflows/project-flow-reusable.yml'
+      - '.github/workflows/project-flow-selftest.yml'
+  pull_request:
+    paths:
+      - 'standards/project-flow/**'
+      - '.github/workflows/project-flow-reusable.yml'
+      - '.github/workflows/project-flow-selftest.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  project-flow-tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+      - run: node --test standards/project-flow/project-flow.test.mjs
