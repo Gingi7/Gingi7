@@ -1,0 +1,67 @@
+name: GINGI Project Flow reusable
+
+on:
+  workflow_call:
+    inputs:
+      config_path:
+        description: Project-local flow configuration.
+        required: false
+        type: string
+        default: ops/project-flow.project.json
+      task_hint:
+        description: Optional task hint overriding PR title/commit message.
+        required: false
+        type: string
+        default: ""
+
+permissions:
+  contents: read
+
+jobs:
+  project-flow:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Checkout caller repository
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          fetch-depth: 0
+      - name: Checkout pinned GINGI standard
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          repository: Gingi7/Gingi7
+          ref: ${{ github.workflow_sha }}
+          path: .gingi-standard
+      - name: Validate project adapter
+        run: node .gingi-standard/standards/project-flow/project-flow.mjs check --root "$GITHUB_WORKSPACE" --config "${{ inputs.config_path }}"
+      - name: Collect changed files
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            base="${{ github.event.pull_request.base.sha }}"
+          else
+            base="${{ github.event.before }}"
+            if [ -z "$base" ] || [ "$base" = "0000000000000000000000000000000000000000" ]; then
+              base="$(git rev-parse HEAD^)"
+            fi
+          fi
+          git diff --name-only "$base"...HEAD > "$RUNNER_TEMP/gingi-flow-files.txt"
+      - name: Build flow report
+        env:
+          TASK_HINT_INPUT: ${{ inputs.task_hint }}
+          PR_TITLE: ${{ github.event.pull_request.title }}
+          COMMIT_MESSAGE: ${{ github.event.head_commit.message }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          hint="$TASK_HINT_INPUT"
+          if [ -z "$hint" ]; then hint="$PR_TITLE"; fi
+          if [ -z "$hint" ]; then hint="$COMMIT_MESSAGE"; fi
+          TASK_HINT="$hint" node .gingi-standard/standards/project-flow/project-flow.mjs report             --root "$GITHUB_WORKSPACE"             --config "${{ inputs.config_path }}"             --files-file "$RUNNER_TEMP/gingi-flow-files.txt"             --out artifacts/project-flow
+          node .gingi-standard/standards/project-flow/project-flow.mjs state             --root "$GITHUB_WORKSPACE"             --config "${{ inputs.config_path }}"             --out artifacts/project-flow
+      - name: Publish Project Flow summary
+        run: |
+          cat artifacts/project-flow/report.md >> "$GITHUB_STEP_SUMMARY"
+          printf '\n---\n' >> "$GITHUB_STEP_SUMMARY"
+          cat artifacts/project-flow/project-state.md >> "$GITHUB_STEP_SUMMARY"
