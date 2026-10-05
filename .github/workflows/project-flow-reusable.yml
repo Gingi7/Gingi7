@@ -30,7 +30,7 @@ jobs:
         uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
         with:
           repository: Gingi7/Gingi7
-          ref: ${{ github.workflow_sha }}
+          ref: d3317a5a45b65d9b0c3a9787d8dbb7187f13e2ad
           path: .gingi-standard
       - name: Validate project adapter
         run: node .gingi-standard/standards/project-flow/project-flow.mjs check --root "$GITHUB_WORKSPACE" --config "${{ inputs.config_path }}"
