@@ -1,0 +1,87 @@
+{
+  "version": "2.0.0",
+  "name": "GINGI Project Flow",
+  "core_context": [
+    "SAFEGUARDS.md",
+    "AGENTS.md"
+  ],
+  "modes": {
+    "FAST": {
+      "contract_required": false,
+      "outcome_gate_required": false,
+      "independent_review": false,
+      "required_steps": ["locate", "change", "targeted_verify", "record"]
+    },
+    "FIX": {
+      "contract_required": false,
+      "outcome_gate_required": false,
+      "independent_review": false,
+      "required_steps": ["reproduce", "root_cause", "fix", "regression_test", "verify", "record"]
+    },
+    "STANDARD": {
+      "contract_required": true,
+      "outcome_gate_required": false,
+      "independent_review": false,
+      "required_steps": ["goal", "acceptance", "reuse_search", "implement", "verify", "record"]
+    },
+    "DEEP": {
+      "contract_required": true,
+      "outcome_gate_required": true,
+      "independent_review": true,
+      "required_steps": ["outcome_gate", "research_if_needed", "spec", "plan", "implement_small_batches", "critic", "converge", "full_verify", "record"]
+    },
+    "SYSTEM": {
+      "contract_required": true,
+      "outcome_gate_required": true,
+      "independent_review": true,
+      "required_steps": ["outcome_gate", "impact_analysis", "adr_or_contract", "plan", "implement_small_batches", "critic", "converge", "full_verify", "rollback_check", "record"]
+    },
+    "RESEARCH": {
+      "contract_required": true,
+      "outcome_gate_required": false,
+      "independent_review": false,
+      "required_steps": ["question", "source_plan", "research", "source_quality", "synthesis", "freshness", "persist"]
+    }
+  },
+  "classification": {
+    "priority": ["RESEARCH", "SYSTEM", "FIX", "DEEP", "FAST", "STANDARD"],
+    "signals": {
+      "RESEARCH": ["research", "source", "sources", "evidence", "benchmark", "market", "pricing", "regulation", "law", "compare solutions", "źródł", "rynek", "cennik", "prawo"],
+      "SYSTEM": ["architecture", "schema", "migration", "security", "auth", "permission", "platform", "orchestrator", "ci/cd", "deployment pipeline", "architektur", "migrac", "bezpieczeń"],
+      "FIX": ["bug", "fix", "broken", "regression", "error", "napraw", "błąd", "blad", "regres", "nie działa", "nie dziala"],
+      "DEEP": ["deep", "rebuild", "cross-domain", "end-to-end", "multiple modules", "głęboki", "gleboki", "przebud", "wiele modułów", "wiele modulow"],
+      "FAST": ["typo", "copy", "text", "padding", "margin", "label", "small fix", "literów", "literow", "tekst", "mała poprawka", "mala poprawka"]
+    },
+    "deep_if_domains_at_least": 3,
+    "deep_if_changed_files_at_least": 12,
+    "fast_extensions": [".md", ".txt", ".css"]
+  },
+  "outcome_gate": {
+    "required_fields": ["problem", "outcome", "metric", "cheapest_valid_change"]
+  },
+  "task_contract": {
+    "base_required_fields": ["id", "mode", "goal", "acceptance"],
+    "research_required_fields": ["question", "required_sources", "freshness"],
+    "system_required_fields": ["risk", "rollback"]
+  },
+  "definition_of_done": {
+    "global": [
+      "Requested outcome is implemented or the blocker is evidenced.",
+      "No competing source of truth or duplicate subsystem was created.",
+      "Relevant automated checks pass.",
+      "Changed behavior has regression coverage when practical.",
+      "Canonical state or handoff is updated after material changes.",
+      "Known limitations and external blockers are explicit."
+    ]
+  },
+  "metrics": {
+    "TTF": "Task/PR start to first successful required verification.",
+    "TTP": "Task start to verified deployed runtime when deployment is in scope.",
+    "FIRST_PASS_ACCEPTANCE": "Share of changes accepted without substantive rework.",
+    "REWORK_RATIO": "Rework effort divided by total implementation effort.",
+    "CONTEXT_LOAD": "Number of canonical context documents routed into a task.",
+    "HUMAN_INTERVENTIONS": "Owner interventions required to complete a task.",
+    "SPEC_DRIFT": "Unmet acceptance criteria after implementation review.",
+    "BUSINESS_IMPACT": "Task-specific outcome metric."
+  }
+}

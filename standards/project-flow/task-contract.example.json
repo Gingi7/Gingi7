@@ -1,0 +1,18 @@
+{
+  "id": "TASK-EXAMPLE",
+  "mode": "DEEP",
+  "goal": "Improve a bounded product capability without rebuilding unrelated modules.",
+  "problem": "The current flow cannot satisfy the target user outcome reliably.",
+  "outcome": "The user can complete the target flow with a traceable result.",
+  "metric": "At least 95% of benchmark scenarios pass.",
+  "cheapest_valid_change": "Extend the existing module and benchmark fixtures.",
+  "acceptance": [
+    "The new behavior is implemented.",
+    "Regression coverage exists.",
+    "Unknown data does not silently become a valid result."
+  ],
+  "risk": "Incorrect assumptions could produce invalid output.",
+  "rollback": "Revert the bounded implementation while preserving existing data.",
+  "required_sources": [],
+  "freshness": null
+}
