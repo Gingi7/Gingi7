@@ -1,0 +1,30 @@
+{
+  "standard_version": "2.0.0",
+  "project": "EXAMPLE",
+  "core_context": [
+    "README.md",
+    "PROJECT_STATE.md",
+    "NEXT_ACTION.md"
+  ],
+  "domains": {
+    "frontend": {
+      "paths": ["web/", "src/ui/", "public/"],
+      "keywords": ["ui", "ux", "frontend", "responsive", "layout"],
+      "context": ["docs/frontend-standard.md"],
+      "definition_of_done": ["Material UI changes receive browser verification."]
+    },
+    "data": {
+      "paths": ["db/", "migrations/", "schemas/"],
+      "keywords": ["database", "schema", "migration"],
+      "context": ["docs/data-contract.md"],
+      "definition_of_done": ["Schema changes include migration and rollback planning."]
+    }
+  },
+  "classification": {
+    "deep_if_domains_at_least": 3,
+    "deep_if_changed_files_at_least": 12
+  },
+  "definition_of_done": [
+    "Project-specific acceptance criteria are satisfied."
+  ]
+}
